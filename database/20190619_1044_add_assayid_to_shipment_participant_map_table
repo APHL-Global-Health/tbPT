@@ -1,0 +1,1 @@
+alter table shipment_participant_map add column assay_id int unsigned not null default 1 after platform_id;
