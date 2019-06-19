@@ -1,0 +1,78 @@
+
+<section class="content-header">
+    <h1>Readiness Checklists - <?php echo $this->surveys['participant']['institute_name'] ?></h1>
+</section>
+<section class="content">
+    <div class="box">
+        <div class="box-body">
+            <?php if (isset($this->message)) : ?>
+                <div class="alert alert-dismissable alert-success">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <ul>
+                        <li><?php echo $this->message; ?></li>
+                    </ul>
+                </div>
+                  
+            <?php endif; ?>
+            <table cellpadding="0" cellspacing="0" border="0" class="display datatable table table-bordered table-hover table-striped " id="currentSchemeTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Cycle</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Status</th>
+                        <th>Respondent</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    if (count($this->surveys['surveys']) > 0) {
+                        $counter = 1;
+                        foreach ($this->surveys['surveys'] as $survey) {
+                    ?>
+                            <tr>
+                                <td><?php echo $counter++; ?></td>
+                                <td><?php echo $survey['survey']['name']; ?></td>
+                                <td><?php echo substr($survey['survey']['start_date'],0,10); ?></td>
+                                <td><?php echo substr($survey['survey']['end_date'],0,10); ?></td>
+                                <td>
+                                <?php
+                                    $statusColor = ['warning', 'info', 'success', 'danger'];
+                                    $statusText = ['NOT SUBMITTED', 'SUBMITTED', 'APPROVED', 'REJECTED'];
+                                    $status = $survey['checklistParticipant']['status'];
+                                    
+                                    echo "<span class='bg-".$statusColor[$status]." status-label'>".$statusText[$status]."</span>"; 
+                                ?>
+                                </td>
+                                <td><?php echo $survey['dataManager']; ?></td>
+                                <td>
+                                    <a href="/readiness-checklist/add/id/<?php echo $survey['checklistParticipant']['readiness_checklist_survey_id']; ?>"
+                                        class="btn btn-info" style="min-width: 100px;"> View</a>
+                                </td>
+                            </tr>
+                    <?php
+                        }
+                    }else{
+
+                    ?>
+                        <tr>
+                            <td colspan="5" class="dataTables_empty">No readiness surveys found!</td>
+                        </tr>
+                    <?php
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+<script>
+
+    var csTable = null;
+    function currentSchemes() {
+        csTable = $('#currentSchemeTable').dataTable({});
+    }
+
+</script>

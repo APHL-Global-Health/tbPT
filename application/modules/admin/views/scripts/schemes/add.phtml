@@ -1,0 +1,77 @@
+<div class="well">
+    <form name="addSchemeForm" id="addSchemeForm" method="post" 
+          action="<?php echo $this->url(array("module"=>"admin", "controller" => "schemes", "action" => "add"),'default', true) ?>" 
+          class="form-horizontal bs-example" role="form" onsubmit="validateNow();return false;">
+        <fieldset>
+            <legend>Add New Scheme</legend>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Scheme ID <span class="mandatory">*</span></label>
+                <div class="col-lg-5">
+                    <input type="text" id="scheme_id" name="scheme_id"  size="50" class="isRequired form-control" title="Please enter a short alpha-numeric scheme id e.g. eid" placeholder="Please enter the scheme id here" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Scheme Name <span class="mandatory">*</span></label>
+                <div class="col-lg-5">
+                    <input type="text" id="scheme_name" name="scheme_name"  size="50" class="isRequired form-control" title="Please enter the scheme name here" placeholder="Please enter the scheme name here" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Assay</label>
+
+                <div class="col-lg-5">
+                    <select id="assay_id" name="assay_id" class="form-control" title="Select the assay here">
+                        <option value="0"> -- Select an assay -- </option>
+                        <?php
+                        foreach ($this->assays as $anAssay) {
+                        ?>
+                            <option value="<?php echo $anAssay->id; ?>" >
+                                <?php echo $anAssay->name; ?>
+                            </option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+                      
+            <br>
+            <div id="respond" style="margin: 0px auto 0px auto; text-align: center;" align="center">
+                <input name="submitbtn" class="btn btn-primary" type="submit" tabindex="7" value="Add"  /> 
+                <input class="btn btn-danger" type="button" onclick="window.history.go(-1)" tabindex="8" value="Cancel" /> 
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<script type="text/javascript">
+	var duplicated = false;
+    function checkDuplicate(tableName, fieldName, obj, fnct, msg) {
+	objValue=document.getElementById(obj).value;
+        $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'check-duplicate')); ?>", { tableName: tableName, fieldName: fieldName, value: objValue, fnct: fnct, format: "html" },
+            function (data) {
+                if (data > 0) {
+                    alert(msg, "err");
+                    duplicated = true;
+		    $("#"+obj).focus();
+                }
+                else {
+                    duplicated = false;
+                }
+		return duplicated;
+            });
+    }
+	
+    function validateNow(){
+
+	    flag = deforayValidator.init({
+		formId: 'addSchemeForm'
+	    });
+	    if(flag && !duplicated){
+		$.blockUI();
+		document.getElementById('addSchemeForm').submit();
+	    }
+    }
+</script>

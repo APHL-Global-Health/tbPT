@@ -1,0 +1,123 @@
+
+<section class="content-header">
+    <h1>Results Submission </h1>
+</section>
+<section class="content">
+
+    <?php if ($_SESSION['datamanagers']['IsVl'] == 3) { ?>
+        <div class="box">
+            <div class="box-body">
+                <div ng-include="'../partialHTMLS/labOperations/addresults.html'">
+
+                </div>
+            </div>
+        </div>
+    </section>
+<?php } else { ?>
+    <div class="box">
+        <div class="box-body">
+
+            <input type="radio" name="currentType" class="currentType" id="currentType1" value="all" /> All Schemes &nbsp;&nbsp;&nbsp;
+            <input type="radio" name="currentType" class="currentType" id="currentType2" value="active" checked="checked" /> Active Schemes only &nbsp;&nbsp;&nbsp;
+            <input type="radio" name="currentType" class="currentType" id="currentType3" value="inactive" /> Inactive Schemes only
+            <br/><br/>
+            <table cellpadding="0" cellspacing="0" border="0" class="display datatable table table-bordered table-hover table-striped " id="currentSchemeTable">
+                <thead>
+                    <tr>
+                        <th>Shipment Date</th>
+                        <th>Scheme</th>
+                        <th>Shipment Code</th>
+                        <th class="hide">Participant ID</th>
+                        <th>Platform</th>
+                        <th class="hide">Platfrom ID</th>
+                        <th>Laboratory</th>
+                        <th>Result Due Date</th>
+                        <th>Response Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="9" class="dataTables_empty">Loading data from server</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </section>
+    <script>
+
+        var csTable = null;
+        function currentSchemes() {
+            csTable = $('#currentSchemeTable').dataTable({
+                "oLanguage": {
+                    "sLengthMenu": "_MENU_ records per page"
+                },
+                "bJQueryUI": false,
+                "bAutoWidth": false,
+                "bInfo": true,
+                "bScrollCollapse": true,
+                "sPaginationType": "full_numbers",
+                "bRetrieve": false,
+                "bDestroy": true,
+                "aoColumns": [
+                    {"sClass": ""},
+                    {"sClass": ""},
+                    {"sClass": ""},
+                    {"sClass": "hide"},
+                    {"sClass": ""},
+                    {"sClass": "hide"},
+                    {"sClass": ""},
+                    {"sClass": ""},
+                    {"sClass": ""},
+                    {"sClass": "center", "bSortable": false}
+                ],
+                "aaSorting": [[5, "desc"]],
+                "bProcessing": true,
+                "bServerSide": true,
+                "sAjaxSource": "<?php echo $this->url(array('module' => 'default', 'controller' => 'participant', 'action' => 'current-schemes', 'format' => 'html')); ?>",
+                "fnServerParams": function (aoData) {
+                    aoData.push({"name": "currentType", "value": $('input[name=currentType]').filter(':checked').val()});
+                },
+                "fnServerData": function (sSource, aoData, fnCallback) {
+                    $.ajax({
+                        "dataType": 'json',
+                        "type": "POST",
+                        "url": sSource,
+                        "data": aoData,
+                        "success": fnCallback
+                    });
+                }
+            });
+        }
+
+
+
+
+        $(document).ready(function () {
+
+            currentSchemes();
+
+            $('#currentType1,#currentType2,#currentType3').click(function () {
+                currentSchemes();
+            });
+        });
+
+
+        function removeSchemes(schemeType, mid) {
+            if (window.confirm("Are you sure you want to remove this response?\n This cannot be undone !")) {
+                $.blockUI();
+                $.post("<?php echo $this->url(array('module' => 'default', 'controller' => 'common', 'action' => 'delete-response')); ?>", {schemeType: schemeType, mid: mid, format: "html"},
+                        function (data) {
+                            alert("Response removed successfully");
+
+                            csTable.fnDraw();
+
+                            $.unblockUI();
+                        });
+            }
+
+        }
+    </script>
+    <?php
+}?>

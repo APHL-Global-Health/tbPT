@@ -1,0 +1,128 @@
+<div class="">
+    <h3>Participant Details
+        <a class="btn btn-primary pull-right" type="button" onclick="window.location.href = '/admin/participants';" tabindex="8" value="Cancel">
+            << Back</a></h3>
+    <hr>
+    <div class="row active" style="background-color: #EFEFEF;padding: 10px 0;">
+        <label class="col-sm-4">Facility Code</label>
+        <div class="col-sm-8">
+            <div>  
+                <?php echo $this->participant['unique_identifier']; ?>&nbsp;
+            </div>
+        </div>
+    </div>
+    <div class="row" style="padding: 10px 0;">
+        <label class="col-sm-4">Facility Name</label>
+        <div class="col-sm-8">
+            <div>  
+                <?php echo $this->participant['institute_name']; ?>&nbsp;
+            </div>
+        </div>
+    </div>
+    <div class="row active" style="background-color: #EFEFEF;padding: 10px 0;">
+        <label class="col-sm-4">Email</label>
+        <div class="col-sm-8">
+            <div>  
+                <?php echo $this->participant['email']; ?>&nbsp;
+            </div>
+        </div>
+    </div>
+    <div class="row" style="padding: 10px 0;">
+        <label class="col-sm-4">Phone</label>
+
+        <div class="col-sm-8">
+            <div> 
+                <?php echo $this->participant['phone']; ?>&nbsp;
+            </div>
+        </div>
+    </div>
+    <div class="row" style="background-color: #EFEFEF;padding: 10px 0;">
+        <label class="col-sm-4">Physical Address</label>
+
+        <div class="col-sm-8">
+            <p> 
+                <?php echo $this->participant['address']; ?>&nbsp;
+            </p>
+        </div>
+    </div>
+    <div class="row" style="padding: 10px 0;">
+        <label class="col-sm-4">Postal Address </label>
+
+        <div class="col-sm-8">
+            <div>
+                <?php echo $this->participant['zip']; ?>&nbsp;
+            </div>
+        </div>
+    </div>
+    <div class="row" style="background-color: #EFEFEF;padding: 10px 0;">
+        <label class="col-sm-4">Shipping Address </label>
+
+        <div class="col-sm-8">
+            <div>
+                <?php echo $this->participant['shipping_address']; ?>&nbsp;
+            </div>
+        </div>
+    </div>
+    <div class="row" style="padding: 10px 0;">
+        <label class="col-sm-4">City </label>
+
+        <div class="col-sm-8">
+            <div>
+                <?php echo $this->participant['city']; ?>&nbsp;
+            </div>
+        </div>
+    </div>
+    <div class="row" style="background-color: #EFEFEF;padding: 10px 0;">
+        <label class="col-sm-4">County </label>
+        <div class="col-sm-8">
+            <div>
+                <?php foreach ($this->counties as $cou) {
+                    ?>
+                    <?php
+                    if (($this->participant['region'] == $cou['CountyID']))
+                        echo $cou['Description'];
+                }
+                ?>&nbsp;
+            </div>
+
+        </div>
+    </div>
+    <div class="row" style="padding: 10px 0;">
+        <label class="col-sm-4">Country </label>
+
+        <div class="col-sm-8">
+            <div>
+                <?php foreach ($this->countriesList as $cou) {
+                    ?>
+                    <?php
+                    if (($this->participant["country"] == $cou['id']))
+                        echo $cou['iso_name'];
+                }
+                ?>&nbsp;
+            </div>
+        </div>
+    </div>
+    <div class="row" style="background-color:#EFEFEF;padding: 10px 0;">
+        <label class="col-sm-4">Facility Level </label>
+
+        <div class="col-sm-8">
+            <p>
+                <?php foreach ($this->networks as $nw) {
+                    ?>
+                    <?php echo ($this->participant['network_tier'] == $nw['network_id']) ? $nw['network_name'] . '<br>' : "" ?>
+                <?php }
+                ?>
+
+            </p>
+        </div>
+    </div>
+    <div class="row" style="padding: 10px 0;">
+        <label class="col-sm-4">Status </label>
+        <div class="col-sm-8">
+            <p class="text-uppercase">
+                <?php echo $this->participant['status']; ?>
+            </p>
+        </div>
+    </div>
+
+</div>

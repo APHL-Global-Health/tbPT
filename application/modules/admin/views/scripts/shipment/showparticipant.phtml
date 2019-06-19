@@ -1,0 +1,149 @@
+
+<h4 style="width:100%;height:50px;border-bottom:1px solid #777;">
+    <div style="font-size:22.5px;line-height:36px;color:#333;float:left;"> <x id="header-p">Participants</x>
+        <i class="fa fa-spin fa-spinner" id="loader" style="display: none"></i>
+    </div>
+    <div style="margin-top:10px;">
+        <a href="#" class="btn btn-primary" onclick="generateExcelFile()" style="float:right;"><i class="fa fa-download"></i> Download</a>
+    </div>
+</h4>
+<br/>
+<table  cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-hover" id="participantsTable">
+    <thead>
+        <tr>
+
+            <th>Lab Name/Participant Name</th>
+            <th>Shipment code</th>
+            <th>Participant ID</th>
+            <th>Mfl Code</th>
+            <th>Email</th>
+            <th>Mobile</th>
+            <th>City</th>
+
+        </tr>
+    </thead>
+
+    <tbody id="participants_div" >
+
+    </tbody>
+</table>
+
+<script type="text/javascript" >
+    var data = {};
+    var shipmentCode = '';
+    function getShipmentParticipants() {
+        $('#loader').show();
+        $.ajax('<?php echo $this->url(array('module' => 'admin', 'controller' => 'shipment', 'action' => 'getparticiting'), 'default', true); ?>/sid/<?php echo $this->shipmentId; ?>',
+                        {
+
+                            success: function (response) {
+
+                                $('#loader').hide();
+                                var trHTML = '';
+                                response = JSON.parse(response);
+                                if (response.status == 1) {
+                                    data = response.data;
+                                    $.each(response.data, function (i, item) {
+                                        shipmentCode = item.shipment_code;
+
+                                        trHTML += '<tr><td>' + item.institute_name
+                                                + '</td><td>' + item.shipment_code
+                                                + '</td><td>' + item.unique_identifier
+                                                + '</td><td>' + item.MflCode
+                                                + '</td><td>' + item.email
+                                                + '</td><td>' + item.mobile
+                                                + '</td><td>' + item.city
+
+                                                + '</td></tr>';
+                                    });
+                                    $('#participants_div').html(trHTML);
+                                    $("#header-p").html("Participants -" + shipmentCode);
+                                } else {
+                                    trHTML += "<tr ><td  colspan=7 class='text-center'>No participants added to this lab</td></tr>";
+                                    $('#participants_div').html(trHTML);
+                                    $("#header-p").html("Participants");
+                                }
+                            },
+                            error: function (data) {
+                                console.log(data);
+                                $('#loader').hide();
+                            }
+                        });
+
+            }
+            getShipmentParticipants();
+            function returnRoundExcelData(excelData) {
+
+                if (excelData.length > 0) {
+                    var returnArray = [];
+
+                    for (var i = 0; i < excelData.length; i++) {
+                        var tempArray = {
+                            'Laboratory Name': excelData[i].institute_name,
+                            'Shipment Code': excelData[i].shipment_code,
+                            'Unique Identifier': excelData[i].unique_identifier,
+                            'Mfl Code': excelData[i].MflCode,
+                            'email': excelData[i].email,
+                            'mobile': excelData[i].mobile,
+                            'City': excelData[i].city,
+                            'Status': ""
+
+
+                        }
+                        returnArray.push(tempArray);
+                    }
+                    console.log(returnArray);
+                    return returnArray;
+                } else {
+                    return {};
+                }
+            }
+
+            function today() {
+                var today = new Date();
+                var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+                var time = today.getHours() + "." + today.getMinutes() + "." + today.getSeconds();
+                var dateTime = date + ' ' + time;
+
+                return dateTime;
+            }
+
+            function generateExcelFile() {
+                if (typeof data !== 'undefined') {
+                    if (data.length > 0) {
+                        var excelData = returnRoundExcelData(data);
+                        console.log(excelData);
+                        var opts = [{
+                                sheetid: 'PARTICIPANTS ON SHIPMENT ' + shipmentCode, header: true,
+                                style: "background:#00ff00",
+
+                                caption: {
+                                    title: 'PARTICIPANTS on survey',
+                                    style: 'font-size: 50px; color:blue;'
+                                },
+                                caption: {
+                                    title: 'My Big Table',
+                                    style: 'font-size: 50px; color:blue;' // Sorry, styles do not works
+                                },
+                                style: 'background:#00FF00',
+                                column: {
+                                    style: 'font-size:30px'
+                                }
+                            }]
+                                ;
+                        var res = alasql('SELECT INTO XLSX("PARTICIPANTS ON SHIPMENT ' + shipmentCode + ' ' + today() + '.xlsx",?) FROM ?', [opts, [excelData]]);
+                    } else {
+                        $.alert({title: "<i class='fa fa-close text-danger'> </i>Error !", content: "Data is not loaded"});
+                    }
+                } else {
+                    $.alert({title: "<i class='fa fa-close text-danger'> </i>Error !", content: "Data is not loaded"});
+                }
+            }
+
+
+
+
+
+
+
+</script>

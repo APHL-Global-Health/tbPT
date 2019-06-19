@@ -1,0 +1,30 @@
+<?php
+$authNameSpace = new Zend_Session_Namespace('datamanagers');
+$common = new Application_Service_Common();
+$config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
+?>
+<div style="">
+    <div class="clearfix">&nbsp;</div>
+    <div class="home-purple">
+        <center class="home-app-info">
+            <div class="clearfix">&nbsp;</div>
+            <p>
+                <?php echo $config->vleidNarrative; ?>
+            </p>
+
+            <p>
+
+                <?php echo $config->applicationHelpNarrative; ?>
+            </p>
+            <div class="clearfix">&nbsp;</div>
+
+        </center>
+    </div>
+    <div class="text-center">
+        <div class="clearfix">&nbsp;</div>
+        <div>
+            <a href="/auth/login" class="btn home-purple btn-lg purple-button">Click to login</a>
+            <a href="/contact-us" class="btn home-purple btn-lg purple-button hidden">Register Facility</a>
+        </div>
+        </p>
+    </div>

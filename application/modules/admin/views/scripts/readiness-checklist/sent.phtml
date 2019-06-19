@@ -1,0 +1,74 @@
+<section class="content-header">
+    <h4 style="width:100%;height:50px;border-bottom:1px solid #777;">
+        <div style="font-size:22.5px;line-height:36px;color:#333;float:left;">
+            Sent Readiness Checklists - <?php echo $this->readinessChecklist['title']; ?>
+        </div>
+        <div style="margin-top:10px;">
+            <a href="/admin/readiness-checklist" class="btn btn-primary" style="float:right;margin-left: 5px;">Back</a>
+            <a href="/admin/readiness-checklist/sendchecklist/id/<?php echo $this->readinessChecklist['id']; ?>" 
+                class="btn btn-primary" style="float:right;">
+                <i class="icon-plus"></i>&nbsp;&nbsp;Send Readiness Checklist</a>
+        </div>
+    </h4>
+</section>
+<section class="content">
+    <div class="box">
+        <div class="box-body">
+            <?php if (isset($this->message)) : ?>
+                <div class="alert alert-dismissable alert-success">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <ul>
+                        <li><?php echo $this->message; ?></li>
+                    </ul>
+                </div>
+                  
+            <?php endif; ?>
+            <?php if(count($this->readinessChecklist['surveys']) > 0) { ?>
+                <table cellpadding="0" cellspacing="0" border="0" class="display datatable table table-bordered table-hover table-striped " id="currentScheme">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Title</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th style="text-align: center;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php
+                        $cnt = 1;
+                        foreach ($this->readinessChecklist['surveys'] as $sent) {
+                    ?>
+                            <tr>
+                                <td><?php echo $cnt++; ?></td>
+                                <td><?php echo $sent['name']; ?></td>
+                                <td><?php echo substr($sent['start_date'], 0, 10); ?></td>
+                                <td><?php echo substr($sent['end_date'], 0, 10); ?></td>
+                                <td style="text-align: center;">
+                                    <a href="/admin/readiness-checklist/participants/id/<?php echo $sent['id']; ?>" class="btn btn-xs btn-info" style="padding: 5px 10px;"> View Response </a>
+                                </td>
+                            </tr>
+                    <?php
+                        }
+                    ?>
+                    </tbody>
+                </table>
+            <?php
+                }else{
+            ?>
+                    <div>
+                        This readiness checklists has never been sent out!
+                    </div>
+            <?php
+                }
+            ?>
+        </div>
+    </div>
+</section>
+<script type="text/javascript" charset="utf-8">
+    /* Table initialisation */
+    $(document).ready(function() {
+    } );
+
+
+</script>

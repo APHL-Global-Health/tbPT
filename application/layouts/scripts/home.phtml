@@ -1,0 +1,138 @@
+<?php
+$authNameSpace = new Zend_Session_Namespace('datamanagers');
+$config = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs" . DIRECTORY_SEPARATOR . "config.ini", APPLICATION_ENV);
+?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title><?php echo $config->applicationName; ?></title>
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+        <!-- Bootstrap 3.3.5 -->
+        <link rel="stylesheet" href="<?php echo $this->baseUrl('assets/bootstrap/css/bootstrap.min.css'); ?>" type="text/css">
+        <link rel="stylesheet" href="<?php echo $this->baseUrl("css/font_awesome.css"); ?>" type="text/css" media="all">
+        <!--[if IE 7]>
+            <link rel="stylesheet" href="<?php echo $this->baseUrl("css/font-awesome-ie7.min.css"); ?>" type="text/css" media="all">
+        <![endif]-->	
+        <link rel="stylesheet" href="<?php echo $this->baseUrl("css/jquery-ui.min.css"); ?>" type="text/css" media="all">
+        <link rel="stylesheet" href="<?php echo $this->baseUrl('assets/plugins/datatables/dataTables.bootstrap.css'); ?>" type="text/css">
+
+        <link rel="stylesheet" href="<?php echo $this->baseUrl('css/global.css'); ?>" type="text/css">
+
+        <script type="text/javascript" src="<?php echo $this->baseUrl("js/jquery.min.js"); ?>"></script>
+
+    </head>
+
+    <body class="hold-transition skin-blue layout-top-nav layout-boxed"
+          style="background-image: url('/images/home-bg/vlbg.png');background-repeat: no-repeat;background-size: cover;">
+        <div class="navbar navbar-default navbar-fixed-top home-navbar"
+             style="height: 51px;">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-custom-menu">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a style="color: #FFF;" class="navbar-brand" href="/" title="<?php echo $config->applicationName; ?>">
+<!--                        --><?php //echo $config->applicationShortName; ?>
+                        <div>
+                            <div class="pull-left">
+                                <img src='/images/country/moh-logo.png' height="60" width="60"/>
+                            </div>
+                            <div class="pull-right" style="font-size:0.8em;margin-left: 10px;">
+                                Ministry of health<br>
+                                National Public Health Laboratories<br>
+                                National HIV Reference Laboratory
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <!-- Navbar Right Menu -->
+                <div class="navbar-custom-menu" style="float: right; padding: 0 10px;">
+                    <ul class="nav navbar-nav">
+                        <?php if (isset($authNameSpace->dm_id)) { ?>
+                            <li class="dropdown user user-menu">
+                                <a href="<?php echo $this->url(array("controller" => "participant", "action" => "dashboard"), null, true) ?>" style="color: #FFF;">
+                                    <i class="icon icon-dashboard"></i> <span class=""><?php echo $authNameSpace->first_name . " " . $authNameSpace->last_name; ?></span>
+                                </a>
+                            </li>
+                        <?php } else { ?>
+                            <li class="home-menu">
+                                <a href="/about-us"" style="color: #FFF;"><i class="icon icon-question"></i> <span>About Us</span></a>
+                            </li>
+                            <li  class="home-menu">
+                                <a href="/resources" style="color: #FFF;"><i class="icon icon-question"></i> Library</a>
+                            </li>
+                            <li class="home-menu hidden">
+                                <a href="/contact-us" style="color: #FFF;"><i class="icon icon-pencil"></i> Enroll</a>
+                            </li>
+                            <li class="home-menu">
+                                <a href="/contact" style="color: #FFF;"><i class="icon icon-envelope"></i> Contact Us</a>
+                            </li>
+                        <?php } ?>
+                    </ul>
+                </div><!-- /.navbar-custom-menu -->
+            </div>
+        </div>
+
+        <div class="container">
+
+            <!-- Content Wrapper. Contains page content -->
+            <div>
+                <!-- Content Header (Page header) -->
+                <section class="content">
+<!--                    <div class="col-lg-12">-->
+<!--                        <div class="col-lg-2" style="text-align: center;padding:10px;">-->
+<!--                            <img src="--><?php //echo $this->baseUrl().$config->countryFlagLogo;?><!--" class="country-flag" style="max-height:100px;"/>-->
+<!--                        </div>-->
+<!--                        <div class="col-lg-8" style="text-align: center;padding:10px;background-color: rgba(255, 255, 255, 0.85);">-->
+<!--                            <h2>--><?php //echo $config->applicationName; ?><!--</h2>-->
+<!--                        </div>-->
+<!--                        <div class="col-lg-2" style="text-align: center;padding:10px;">-->
+<!--                            <img src="--><?php //echo $this->baseUrl().$config->instituteLogo;?><!--" style="max-height:100px;" />-->
+<!--                        </div>						-->
+<!--                    </div>-->
+                    <?php echo $this->layout()->content; ?>
+
+                </section>
+
+            </div><!-- /.content-wrapper -->
+
+            <div class="control-sidebar-bg"></div>
+        </div><!-- ./wrapper -->
+
+        <!-- FOOTER -->
+        <?php include $_SERVER['DOCUMENT_ROOT'].'/partialHTMLS/footer.html'; ?>
+        <!-- /FOOTER -->
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="<?php echo $this->baseUrl('js/html5shiv.min.js'); ?>"></script>
+            <script src="<?php echo $this->baseUrl('js/respond.min.js'); ?>"></script>
+        <![endif]-->
+
+        <!-- jQuery 2.1.4 -->
+        <script src="<?php echo $this->baseUrl('assets/plugins/jQuery/jQuery-2.1.4.min.js'); ?>"></script>
+
+        <!-- jQuery UI 1.11.4 -->
+        <script src="<?php echo $this->baseUrl("assets/plugins/jQueryUI/jquery-ui.min.js"); ?>"></script>
+        <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+        <script>
+            $.widget.bridge('uibutton', $.ui.button);
+        </script>
+        <!-- Bootstrap 3.3.5 -->
+        <script type="text/javascript" src="<?php echo $this->baseUrl('assets/bootstrap/js/bootstrap.min.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl("js/hoverIntent.js"); ?>"></script>
+
+        <script type="text/javascript" src="<?php echo $this->baseUrl("assets/plugins/datatables/jquery.dataTables.min.js"); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl("assets/plugins/datatables/dataTables.bootstrap.min.js"); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl("js/jquery.blockUI.js"); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl("js/deforayValidation.js"); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl("js/moment.min.js"); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl("js/deforayModal.js"); ?>"></script>	
+
+    </body>
+</html>
